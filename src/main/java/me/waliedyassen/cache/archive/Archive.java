@@ -1,5 +1,6 @@
 package me.waliedyassen.cache.archive;
 
+import me.waliedyassen.cache.CacheException;
 import me.waliedyassen.cache.fs.FileSystem;
 
 /**
@@ -27,5 +28,26 @@ public final class Archive {
      */
     public Archive(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
+        initialize();
+    }
+
+    /**
+     * Initializes the archive.
+     */
+    private void initialize() {
+        byte[] data = fileSystem.loadIndex();
+        if (data == null) {
+            throw new CacheException("Failed to load the index data from the file system");
+        }
+        index.decode(data);
+    }
+
+    /**
+     * Loads all of the data of the archive from the file system.
+     */
+    private void loadData() {
+        for (Group group : index.getGroups()) {
+            // NOOP
+        }
     }
 }
