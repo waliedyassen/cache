@@ -25,4 +25,14 @@ public class CacheException extends RuntimeException {
     public CacheException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    /**
+     * Creates a {@link CacheException} that indicates an invalid file system directory
+     * was specified.
+     *
+     * @return the created {@link CacheException} object.
+     */
+    public static CacheException fileSystemInvalidDirectory() {
+        return new CacheException("The specified directory for the file system is not valid");
+    }
 }

@@ -9,9 +9,16 @@ package me.waliedyassen.cache.fs;
 public interface FileSystem {
 
     /**
-     * Loads the file system index table data.
+     * Loads the raw data of the index table of this file system.
      *
-     * @return the file system index table data.
+     * @return the raw data of the index table.
      */
     byte[] loadIndex();
+
+    /**
+     * Stores the raw data of the index table of this file system.
+     *
+     * @param data the raw data of the file system index table.
+     */
+    void storeIndex(byte[] data);
 }
