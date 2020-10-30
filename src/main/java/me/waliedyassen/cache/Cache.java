@@ -4,6 +4,7 @@ import me.waliedyassen.cache.archive.Archive;
 import me.waliedyassen.cache.fs.FileSystem;
 import me.waliedyassen.cache.fs.FileSystemProvider;
 import me.waliedyassen.cache.fs.java.JavaFileSystemProvider;
+import me.waliedyassen.cache.fs.pack.PackFileSystemProvider;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -88,5 +89,15 @@ public final class Cache {
      */
     public static Cache openJava(Path directory) {
         return open(JavaFileSystemProvider.create(directory));
+    }
+
+    /**
+     * Opens a {@link Cache cache} using the Packed File System.
+     *
+     * @param directory the path of the directory that contain the file system.
+     * @return the created {@link Cache} object.
+     */
+    public static Cache openPack(Path directory) {
+        return open(PackFileSystemProvider.create(directory));
     }
 }
