@@ -30,6 +30,30 @@ public final class JavaFileSystem implements FileSystem {
      * {@inheritDoc}
      */
     @Override
+    public void commit() {
+        // NOOP
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public byte[] loadGroup(int id) {
+        return dataFs.load(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void storeGroup(int id, byte[] data) {
+        dataFs.store(id, data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public byte[] loadIndex() {
         return masterFs.load(id);
     }
