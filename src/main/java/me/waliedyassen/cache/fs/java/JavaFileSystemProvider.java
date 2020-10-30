@@ -101,7 +101,6 @@ public final class JavaFileSystemProvider implements FileSystemProvider {
         fs = new JavaFileSystem(id, dataFs, masterFs);
         cached.put(id, fs);
         return fs;
-
     }
 
     /**
