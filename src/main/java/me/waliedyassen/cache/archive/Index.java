@@ -1,10 +1,8 @@
 package me.waliedyassen.cache.archive;
 
-import lombok.AccessLevel;
 import lombok.Getter;
+import me.waliedyassen.cache.compression.Js5Compression;
 import me.waliedyassen.cache.io.Packet;
-
-import java.nio.ByteBuffer;
 
 /**
  * Index table for a single {@link Archive}, it holds useful information about each entry of the archive (groups and files)
@@ -14,9 +12,24 @@ import java.nio.ByteBuffer;
  */
 public final class Index {
 
+    /**
+     * When flagged, groups and files will have DJB2 32 name stored.
+     */
     private static final int FLAG_NAME32 = bit(0);
+
+    /**
+     * When flagged, groups will have whirlpool checksum stored.
+     */
     private static final int FLAG_WHIRLPOOL = bit(1);
+
+    /**
+     * When flagged, groups will have compressed size stored.
+     */
     private static final int FLAG_COMPRESSED_SIZE = bit(2);
+
+    /**
+     * When flagged, groups will have decompressed size stored.
+     */
     private static final int FLAG_DECOMPRESSED_CRC = bit(3);
 
     /**
@@ -58,7 +71,7 @@ public final class Index {
     /**
      * The groups that are within this index table.
      */
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
     private Group[] groups;
 
     /**
