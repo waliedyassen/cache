@@ -67,7 +67,7 @@ public final class Index {
      * @param data the array of byte data to decode the content of the index from.
      */
     public void decode(byte[] data) {
-        Packet packet = new Packet(ByteBuffer.wrap(data));
+        Packet packet = new Packet(Js5Compression.decompress(data));
         protocolNumber = packet.g1();
         if (protocolNumber < 5 || protocolNumber > 7) {
             throw new IllegalStateException("Incorrect JS5 protocol number: " + protocolNumber);

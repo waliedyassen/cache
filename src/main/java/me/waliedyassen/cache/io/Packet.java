@@ -10,17 +10,31 @@ import java.nio.ByteBuffer;
 public final class Packet {
 
     /**
-     * The backing byte buffer of the packet.
+     * The underlying byte data of the packet.
      */
-    private final ByteBuffer buffer;
+    private final byte[] data;
+
+    /**
+     * The position of the packet.
+     */
+    private int pos;
 
     /**
      * Constructs a new {@link Packet} type object instance.
      *
-     * @param buffer the backing byte buffer of the packet.
+     * @param size the initial size of the packet.
      */
-    public Packet(ByteBuffer buffer) {
-        this.buffer = buffer;
+    public Packet(int size) {
+        this(new byte[size]);
+    }
+
+    /**
+     * Constructs a new {@link Packet} type object instance.
+     *
+     * @param data the underlying byte data of the packet.
+     */
+    public Packet(byte[] data) {
+        this.data = data;
     }
 
     /**
@@ -29,7 +43,7 @@ public final class Packet {
      * @param value the byte value to write to the buffer.
      */
     public void p1(int value) {
-        buffer.put((byte) value);
+        data[pos++] = (byte) value;
     }
 
     /**
@@ -38,8 +52,8 @@ public final class Packet {
      * @param value the 16-bit integer value to write to the buffer.
      */
     public void p2(int value) {
-        buffer.put((byte) (value >> 8));
-        buffer.put((byte) (value >> 0));
+        data[pos++] = (byte) (value >> 8);
+        data[pos++] = (byte) (value);
     }
 
     /**
@@ -48,8 +62,8 @@ public final class Packet {
      * @param value the little endian 16-bit integer value to write to the buffer.
      */
     public void ip2(int value) {
-        buffer.put((byte) (value >> 0));
-        buffer.put((byte) (value >> 8));
+        data[pos++] = (byte) value;
+        data[pos++] = (byte) (value >> 8);
     }
 
     /**
@@ -58,9 +72,9 @@ public final class Packet {
      * @param value the 24-bit integer value to write to the buffer.
      */
     public void p3(int value) {
-        buffer.put((byte) (value >> 16));
-        buffer.put((byte) (value >> 8));
-        buffer.put((byte) (value >> 0));
+        data[pos++] = (byte) (value >> 16);
+        data[pos++] = (byte) (value >> 8);
+        data[pos++] = (byte) value;
     }
 
     /**
@@ -69,9 +83,9 @@ public final class Packet {
      * @param value the little endian 24-bit integer value to write to the buffer.
      */
     public void ip3(int value) {
-        buffer.put((byte) (value >> 0));
-        buffer.put((byte) (value >> 8));
-        buffer.put((byte) (value >> 16));
+        data[pos++] = (byte) value;
+        data[pos++] = (byte) (value >> 8);
+        data[pos++] = (byte) (value >> 16);
     }
 
     /**
@@ -80,10 +94,10 @@ public final class Packet {
      * @param value the 32-bit integer value to write to the buffer.
      */
     public void p4(int value) {
-        buffer.put((byte) (value >> 24));
-        buffer.put((byte) (value >> 16));
-        buffer.put((byte) (value >> 8));
-        buffer.put((byte) (value >> 0));
+        data[pos++] = (byte) (value >> 24);
+        data[pos++] = (byte) (value >> 16);
+        data[pos++] = (byte) (value >> 8);
+        data[pos++] = (byte) value;
     }
 
     /**
@@ -92,10 +106,10 @@ public final class Packet {
      * @param value the little endian 32-bit integer value to write to the buffer.
      */
     public void ip4(int value) {
-        buffer.put((byte) (value >> 0));
-        buffer.put((byte) (value >> 8));
-        buffer.put((byte) (value >> 16));
-        buffer.put((byte) (value >> 24));
+        data[pos++] = (byte) value;
+        data[pos++] = (byte) (value >> 8);
+        data[pos++] = (byte) (value >> 16);
+        data[pos++] = (byte) (value >> 24);
     }
 
     /**
@@ -104,11 +118,11 @@ public final class Packet {
      * @param value the 40-bit integer value to write to the buffer.
      */
     public void p5(long value) {
-        buffer.put((byte) (int) (value >> 32));
-        buffer.put((byte) (int) (value >> 24));
-        buffer.put((byte) (int) (value >> 16));
-        buffer.put((byte) (int) (value >> 8));
-        buffer.put((byte) (int) (value >> 0));
+        data[pos++] = (byte) (int) (value >> 32);
+        data[pos++] = (byte) (int) (value >> 24);
+        data[pos++] = (byte) (int) (value >> 16);
+        data[pos++] = (byte) (int) (value >> 8);
+        data[pos++] = (byte) (int) value;
     }
 
     /**
@@ -117,11 +131,11 @@ public final class Packet {
      * @param value the little endian 40-bit integer value to write to the buffer.
      */
     public void ip5(long value) {
-        buffer.put((byte) (int) (value >> 0));
-        buffer.put((byte) (int) (value >> 8));
-        buffer.put((byte) (int) (value >> 16));
-        buffer.put((byte) (int) (value >> 24));
-        buffer.put((byte) (int) (value >> 32));
+        data[pos++] = (byte) (int) value;
+        data[pos++] = (byte) (int) (value >> 8);
+        data[pos++] = (byte) (int) (value >> 16);
+        data[pos++] = (byte) (int) (value >> 24);
+        data[pos++] = (byte) (int) (value >> 32);
     }
 
     /**
@@ -160,14 +174,6 @@ public final class Packet {
         }
     }
 
-    public static void main(String[] args) {
-        ByteBuffer buffer = ByteBuffer.allocate(512);
-        Packet packet = new Packet(buffer);
-        packet.g1();
-
-
-    }
-
     /**
      * Writes the specified byte buffer at the current position and increment the position by the amount of bytes
      * we have written to the buffer.
@@ -188,7 +194,7 @@ public final class Packet {
      */
     public void pArrayBuffer(byte[] buf, int off, int len) {
         while (off < len) {
-            buffer.put(buf[off++]);
+            data[pos++] = (buf[off++]);
         }
     }
 
@@ -199,9 +205,9 @@ public final class Packet {
      */
     public void pstr(String value) {
         for (int ch : value.toCharArray()) {
-            buffer.put((byte) ch);
+            data[pos++] = ((byte) ch);
         }
-        buffer.put((byte) 0);
+        data[pos++] = ((byte) 0);
     }
 
 
@@ -211,7 +217,7 @@ public final class Packet {
      * @return the byte value that was read.
      */
     public int g1() {
-        return buffer.get() & 0xff;
+        return data[pos++] & 0xff;
     }
 
     /**
@@ -221,8 +227,8 @@ public final class Packet {
      */
     public int g2() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 8;
-        value |= (buffer.get() & 0xff) << 0;
+        value |= (data[pos++] & 0xff) << 8;
+        value |= data[pos++] & 0xff;
         return value;
     }
 
@@ -233,8 +239,8 @@ public final class Packet {
      */
     public int ig2() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 0;
-        value |= (buffer.get() & 0xff) << 8;
+        value |= data[pos++] & 0xff;
+        value |= (data[pos++] & 0xff) << 8;
         return value;
     }
 
@@ -245,9 +251,9 @@ public final class Packet {
      */
     public int g3() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 16;
-        value |= (buffer.get() & 0xff) << 8;
-        value |= (buffer.get() & 0xff) << 0;
+        value |= (data[pos++] & 0xff) << 16;
+        value |= (data[pos++] & 0xff) << 8;
+        value |= data[pos++] & 0xff;
         return value;
     }
 
@@ -258,9 +264,9 @@ public final class Packet {
      */
     public int ig3() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 0;
-        value |= (buffer.get() & 0xff) << 8;
-        value |= (buffer.get() & 0xff) << 16;
+        value |= data[pos++] & 0xff;
+        value |= (data[pos++] & 0xff) << 8;
+        value |= (data[pos++] & 0xff) << 16;
         return value;
     }
 
@@ -271,10 +277,10 @@ public final class Packet {
      */
     public int g4() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 24;
-        value |= (buffer.get() & 0xff) << 16;
-        value |= (buffer.get() & 0xff) << 8;
-        value |= (buffer.get() & 0xff) << 0;
+        value |= (data[pos++] & 0xff) << 24;
+        value |= (data[pos++] & 0xff) << 16;
+        value |= (data[pos++] & 0xff) << 8;
+        value |= data[pos++] & 0xff;
         return value;
     }
 
@@ -285,10 +291,10 @@ public final class Packet {
      */
     public int ig4() {
         int value = 0;
-        value |= (buffer.get() & 0xff) << 0;
-        value |= (buffer.get() & 0xff) << 8;
-        value |= (buffer.get() & 0xff) << 16;
-        value |= (buffer.get() & 0xff) << 24;
+        value |= data[pos++] & 0xff;
+        value |= (data[pos++] & 0xff) << 8;
+        value |= (data[pos++] & 0xff) << 16;
+        value |= (data[pos++] & 0xff) << 24;
         return value;
     }
 
@@ -299,7 +305,7 @@ public final class Packet {
      * @return the smart value that was read.
      */
     public int gSmart1or2() {
-        int value = buffer.get(buffer.position()) & 0xFF;
+        int value = data[pos] & 0xff;
         if (value < 128) {
             return g1();
         }
@@ -313,7 +319,7 @@ public final class Packet {
      * @return the smart value that was read.
      */
     public int gSmart2or4() {
-        if (buffer.get(buffer.position()) < 0) {
+        if (data[pos] < 0) {
             return g4() & 0x7FFFFFFF;
         }
         return g2();
@@ -338,8 +344,34 @@ public final class Packet {
      * @param len the length to stop reading at in the byte buffer.
      */
     public void gArrayBuffer(byte[] buf, int off, int len) {
-        while (off < len) {
-            buf[off++] = buffer.get();
-        }
+        System.arraycopy(data, pos, buf, off, len);
+        pos += len;
+    }
+
+    /**
+     * Returns the backing data byte array of the packet.
+     *
+     * @return the backing data byte array of the packet.
+     */
+    public byte[] data() {
+        return data;
+    }
+
+    /**
+     * Returns the current read and write position of the packet.
+     *
+     * @return the read and write position of the packet.
+     */
+    public int pos() {
+        return pos;
+    }
+
+    /**
+     * Updates the current read and write position of the packet.
+     *
+     * @param pos the new read and write position.
+     */
+    public void pos(int pos) {
+        this.pos = pos;
     }
 }
