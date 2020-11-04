@@ -3,7 +3,6 @@ package me.waliedyassen.cache.fs.pack;
 import lombok.RequiredArgsConstructor;
 import me.waliedyassen.cache.fs.FileSystem;
 import me.waliedyassen.cache.fs.FileSystemProvider;
-import me.waliedyassen.cache.fs.java.JavaFileSystemProvider;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

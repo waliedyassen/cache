@@ -50,4 +50,22 @@ public final class Archive {
             // NOOP
         }
     }
+
+    /**
+     * Returns the CRC-32 checksum of the raw index data of this archive.
+     *
+     * @return the CRC-32 checksum value.
+     */
+    public int getCrc() {
+        return index.getCrc();
+    }
+
+    /**
+     * Returns the whirlpool checksum of the raw index data of this archive.
+     *
+     * @return the whirlpool checksum value.
+     */
+    public byte[] getWhirlpool() {
+        return index.getWhirlpool();
+    }
 }

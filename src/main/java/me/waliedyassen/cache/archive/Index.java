@@ -1,7 +1,10 @@
 package me.waliedyassen.cache.archive;
 
+import com.uwyn.rife.tools.Whirlpool;
+import lombok.AccessLevel;
 import lombok.Getter;
 import me.waliedyassen.cache.compression.Js5Compression;
+import me.waliedyassen.cache.io.CRC;
 import me.waliedyassen.cache.io.Packet;
 
 /**
@@ -73,6 +76,18 @@ public final class Index {
      */
     @Getter
     private Group[] groups;
+
+    /**
+     * The CRC-32 checksum of the raw index data.
+     */
+    @Getter(AccessLevel.PACKAGE)
+    private int crc;
+
+    /**
+     * The whirlpool checksum of the raw index data.
+     */
+    @Getter(AccessLevel.PACKAGE)
+    private byte[] whirlpool;
 
     /**
      * Decodes the index table content from the specified array of {@code byte} data.
@@ -173,6 +188,17 @@ public final class Index {
                 }
             }
         }
+        updateChecksum(data);
+    }
+
+    /**
+     * Re-computes all of the checksum values of the raw index data.
+     *
+     * @param data the draw index data to update the checksum values based on.
+     */
+    private void updateChecksum(byte[] data) {
+        crc = CRC.compute(data);
+        whirlpool = Whirlpool.compute(data);
     }
 
     /**
