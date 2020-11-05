@@ -44,7 +44,7 @@ public final class Index {
     /**
      * The version number of index table which indicates how many revisions or updates did it have.
      */
-    @Getter
+    @Getter(AccessLevel.PACKAGE)
     private int version;
 
     /**

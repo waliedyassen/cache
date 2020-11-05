@@ -51,6 +51,16 @@ public final class Archive {
         }
     }
 
+
+    /**
+     * Returns the version number of the index of this archive.
+     *
+     * @return the version number of the index of this archive.
+     */
+    public int getVersion() {
+        return index.getVersion();
+    }
+
     /**
      * Returns the CRC-32 checksum of the raw index data of this archive.
      *
